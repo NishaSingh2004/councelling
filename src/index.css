@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans bg-beige-100 text-slate-950 dark:bg-beige-950 dark:text-beige-50 transition-colors duration-300 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-slate-950 dark:text-white tracking-tight;
+  }
+
+  p {
+    @apply text-slate-950 dark:text-beige-100 font-bold leading-relaxed;
+  }
+
+  /* Force all elements to never use italic font styles */
+  *, *::before, *::after {
+    font-style: normal !important;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-beige-50 dark:bg-beige-900;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-beige-300 dark:bg-beige-850 rounded-full hover:bg-beige-400 dark:hover:bg-beige-700 transition-colors;
+  }
+
+  ::selection {
+    @apply bg-primary-100 text-primary-900 dark:bg-primary-900 dark:text-primary-100;
+  }
+}
+
+@layer components {
+  /* High-end design tokens */
+  .premium-card {
+    @apply bg-beige-50 dark:bg-beige-900 border border-beige-200/60 dark:border-beige-850/40 rounded-2xl shadow-[0_4px_20px_-4px_rgba(34,66,41,0.03)] dark:shadow-[0_4px_30px_-5px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_25px_-6px_rgba(34,66,41,0.06)] dark:hover:shadow-[0_10px_30px_-6px_rgba(0,0,0,0.6)] transition-all duration-300;
+  }
+  
+  .glass-card {
+    @apply bg-beige-50/90 dark:bg-beige-950/90 backdrop-blur-md border border-beige-200/40 dark:border-beige-900/20 shadow-[0_8px_32px_-4px_rgba(34,66,41,0.02)] rounded-2xl;
+  }
+
+  /* Button system */
+  .btn-primary {
+    @apply px-6 py-3 bg-primary hover:bg-primary-600 text-white rounded-xl font-semibold transition-all duration-300 shadow-[0_4px_12px_rgba(34,66,41,0.15)] hover:shadow-[0_6px_18px_rgba(34,66,41,0.25)] hover:-translate-y-0.5 active:translate-y-0 text-sm tracking-wide;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-secondary hover:bg-secondary-600 text-white rounded-xl font-semibold transition-all duration-300 shadow-[0_4px_12px_rgba(78,101,81,0.12)] hover:shadow-[0_6px_18px_rgba(78,101,81,0.22)] hover:-translate-y-0.5 active:translate-y-0 text-sm tracking-wide;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 border border-beige-300 hover:border-primary text-slate-700 hover:text-primary dark:border-beige-800 dark:text-beige-300 dark:hover:text-white rounded-xl font-semibold transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 text-sm tracking-wide;
+  }
+
+  /* Horizontal Secondary Tabs */
+  .tab-bar-container {
+    @apply flex border-b border-beige-200 dark:border-beige-800/60 overflow-x-auto gap-1 mb-8;
+  }
+
+  .tab-item-btn {
+    @apply px-5 py-3 border-b-2 font-semibold text-sm transition-all whitespace-nowrap -mb-[2px] flex items-center gap-2;
+  }
+
+  .tab-item-active {
+    @apply border-primary text-primary font-bold;
+  }
+
+  .tab-item-inactive {
+    @apply border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-white hover:border-beige-200 dark:hover:border-beige-800/40;
+  }
+}
