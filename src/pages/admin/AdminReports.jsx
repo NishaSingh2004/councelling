@@ -6,6 +6,24 @@ import { RevenueChart, ServicesChart } from '../../components/admin/ChartContain
 export default function AdminReports() {
   const { appointments, clients } = useApp();
 
+  const activeApts = appointments.filter(a => a.status !== 'Cancelled');
+  const revenueSum = activeApts.reduce((acc, a) => acc + (a.price || 1500), 0);
+  const completedCount = appointments.filter(a => a.status === 'Completed').length;
+  const registrantsCount = clients.length;
+
+  // Find popular offering
+  const serviceCounts = {};
+  activeApts.forEach(a => {
+    serviceCounts[a.service] = (serviceCounts[a.service] || 0) + 1;
+  });
+  let popularService = "No Data";
+  let popularPercent = 0;
+  if (activeApts.length > 0) {
+    const highest = Object.entries(serviceCounts).sort((a, b) => b[1] - a[1])[0];
+    popularService = highest[0];
+    popularPercent = Math.round((highest[1] / activeApts.length) * 100);
+  }
+
   const handleExport = (format) => {
     alert(`Generating export bundle...\nFormat: ${format.toUpperCase()}\nTarget: Vanshika Counselling Studio Financial and Clinical Report (2026)\nDownload will begin shortly.`);
   };
@@ -47,17 +65,15 @@ export default function AdminReports() {
         <div className="premium-card p-6 space-y-2">
           <span className="text-[10px] font-bold text-slate-950 dark:text-beige-300 uppercase">Gross Revenue</span>
           <div className="flex items-center gap-2">
-            <span className="font-serif text-2xl font-bold text-slate-950 dark:text-white">₹1,24,000</span>
-            <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-0.5"><TrendingUp className="h-3 w-3" />+12%</span>
+            <span className="font-serif text-2xl font-bold text-slate-950 dark:text-white">₹{revenueSum.toLocaleString('en-IN')}</span>
           </div>
-          <span className="text-[10px] text-slate-950 dark:text-beige-300 block font-bold">Compared to last month</span>
+          <span className="text-[10px] text-slate-950 dark:text-beige-300 block font-bold">Total revenue generated</span>
         </div>
 
         <div className="premium-card p-6 space-y-2">
           <span className="text-[10px] font-bold text-slate-950 dark:text-beige-300 uppercase">Session Volumes</span>
           <div className="flex items-center gap-2">
-            <span className="font-serif text-2xl font-bold text-slate-950 dark:text-white">84</span>
-            <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-0.5"><TrendingUp className="h-3 w-3" />+8%</span>
+            <span className="font-serif text-2xl font-bold text-slate-950 dark:text-white">{completedCount}</span>
           </div>
           <span className="text-[10px] text-slate-950 dark:text-beige-300 block font-bold">Completed virtual consultations</span>
         </div>
@@ -65,8 +81,7 @@ export default function AdminReports() {
         <div className="premium-card p-6 space-y-2">
           <span className="text-[10px] font-bold text-slate-950 dark:text-beige-300 uppercase">New Registrants</span>
           <div className="flex items-center gap-2">
-            <span className="font-serif text-2xl font-bold text-slate-950 dark:text-white">+24</span>
-            <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-0.5"><TrendingUp className="h-3 w-3" />+15%</span>
+            <span className="font-serif text-2xl font-bold text-slate-950 dark:text-white">{registrantsCount}</span>
           </div>
           <span className="text-[10px] text-slate-950 dark:text-beige-300 block font-bold">Active directory patients</span>
         </div>
@@ -74,9 +89,9 @@ export default function AdminReports() {
         <div className="premium-card p-6 space-y-2">
           <span className="text-[10px] font-bold text-slate-950 dark:text-beige-300 uppercase">Popular Offering</span>
           <div className="text-sm font-bold text-slate-950 dark:text-white truncate pt-1">
-            Anxiety Counselling
+            {popularService}
           </div>
-          <span className="text-[10px] text-slate-950 dark:text-beige-300 block font-bold">42% of total schedule bookings</span>
+          <span className="text-[10px] text-slate-950 dark:text-beige-300 block font-bold">{popularPercent}% of total schedule bookings</span>
         </div>
 
       </div>

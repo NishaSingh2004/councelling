@@ -4,20 +4,20 @@ import {
   ChevronRight, Brain, Heart, Briefcase, Activity, Sparkles, Star, ChevronLeft
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { services, testimonials, therapists } from '../../data/mockData';
+import { testimonials, therapists } from '../../data/mockData';
 import FAQAccordion from '../../components/public/FAQAccordion';
 import ServiceCard from '../../components/public/ServiceCard';
 import Modal from '../../components/common/Modal';
 
 export default function Home() {
-  const { navigateTo } = useApp();
+  const { navigateTo, services } = useApp();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const trustMetrics = [
     { label: 'Licensed Therapists', value: '4 Senior Staff', desc: 'Board-certified clinical doctors' },
     { label: 'Secure Sessions', value: '100% Encrypted', desc: 'HIPAA-compliant video rooms' },
-    { label: 'Years of Experience', value: '12+ Years Lead', desc: 'Vanshika Singh Ph.D. Stanford' },
+    { label: 'Years of Experience', value: '12+ Years Lead', desc: 'Clinical Director & Senior Staff' },
     { label: 'Happy Clients', value: '500+ Patients', desc: 'High recovery rate clinical trials' }
   ];
 
@@ -100,7 +100,7 @@ export default function Home() {
                 <div className="absolute bottom-6 left-6 right-6 p-4 glass-card border-white/30 text-slate-800 dark:text-slate-100">
                   <span className="text-[10px] font-bold text-primary uppercase tracking-widest block">Clinical Director</span>
                   <span className="font-serif text-base font-bold text-slate-900 dark:text-white block mt-0.5">Vanshika Singh</span>
-                  <span className="text-[11px] text-slate-950 dark:text-beige-200 block font-bold mt-1">Ph.D. Clinical Psychology, Stanford University</span>
+                  <span className="text-[11px] text-slate-950 dark:text-beige-200 block font-bold mt-1">Licensed Clinical Psychologist</span>
                 </div>
               </div>
             </div>

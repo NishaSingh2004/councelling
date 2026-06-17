@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { FileText, Video, Clipboard, Plus, Save, Clock } from 'lucide-react';
+import { FileText, Video, Clipboard, Plus, Save, Clock, Link } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import Modal from '../../components/common/Modal';
 
 export default function AdminSessions() {
-  const { appointments, updateSessionNotes, completeAppointment } = useApp();
+  const { appointments, updateSessionNotes, completeAppointment, generateMeetLink } = useApp();
   
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,13 +77,25 @@ export default function AdminSessions() {
                   
                   {apt.status === 'Confirmed' && (
                     <>
-                      <button
-                        onClick={() => alert(`Opening HIPAA secure telehealth video feed for order ${apt.id}...`)}
-                        className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
-                      >
-                        <Video className="h-4 w-4" />
-                        <span>Join Session</span>
-                      </button>
+                      {apt.meetLink ? (
+                        <a
+                          href={apt.meetLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
+                        >
+                          <Video className="h-4 w-4" />
+                          <span>Join Session</span>
+                        </a>
+                      ) : (
+                        <button
+                          onClick={() => generateMeetLink(apt.id)}
+                          className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
+                        >
+                          <Link className="h-4 w-4" />
+                          <span>Generate Meet Link</span>
+                        </button>
+                      )}
                       <button
                         onClick={() => handleMarkComplete(apt.id)}
                         className="px-4 py-2 bg-stone-100 hover:bg-stone-250 dark:bg-sage-800 text-stone-750 dark:text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-all"

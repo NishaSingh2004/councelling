@@ -64,7 +64,7 @@ export const therapists = [
     experience: '12 Years',
     specialization: 'Anxiety & Depression Therapy',
     rating: 4.9,
-    bio: 'Vanshika Singh holds a Ph.D. in Clinical Psychology from Stanford and has spent over a decade helping individuals overcome severe panic, generalized anxiety, and depression using mindfulness-integrated CBT.'
+    bio: 'Vanshika Singh has spent over a decade helping individuals overcome severe panic, generalized anxiety, and depression using mindfulness-integrated CBT.'
   },
   {
     id: 'th-marcus',
@@ -159,106 +159,30 @@ export const initialTimeSlots = [
   { id: 'slot-8', date: '2026-06-16', time: '05:00 PM', status: 'available' }
 ];
 
-export const initialAppointments = [
-  {
-    id: 'APT-9041',
-    clientName: 'Jane Doe',
-    clientEmail: 'jane.doe@example.com',
-    therapist: 'Vanshika Singh',
-    service: 'Anxiety Counselling',
-    date: '2026-06-15',
-    time: '09:00 AM',
-    status: 'Confirmed',
-    notes: 'Client notes: reported improvements in sleep. Focus on breathwork exercises in next session.',
-    duration: '50 Mins',
-    price: 1500
-  },
-  {
-    id: 'APT-7922',
-    clientName: 'Marcus Chen',
-    clientEmail: 'marcus.chen@example.com',
-    therapist: 'Vanshika Singh',
-    service: 'Stress Management',
-    date: '2026-06-12',
-    time: '11:00 AM',
-    status: 'Completed',
-    notes: 'Client notes: reviewed work boundaries and checklist structures.',
-    duration: '50 Mins',
-    price: 1000
-  },
-  {
-    id: 'APT-6043',
-    clientName: 'Sarah Jenkins',
-    clientEmail: 'sarah.jenkins@example.com',
-    therapist: 'Vanshika Singh',
-    service: 'Anxiety Counselling',
-    date: '2026-06-08',
-    time: '02:00 PM',
-    status: 'Completed',
-    notes: 'Client notes: established baseline anxiety metrics. Discussed exposure hierarchies.',
-    duration: '50 Mins',
-    price: 1500
-  },
-  {
-    id: 'APT-1124',
-    clientName: 'Alex Mercer',
-    clientEmail: 'alex.mercer@example.com',
-    therapist: 'Dr. Marcus Vance',
-    service: 'Relationship Therapy',
-    date: '2026-06-16',
-    time: '10:00 AM',
-    status: 'Pending',
-    notes: 'Initial check-in on couples communication dynamics.',
-    duration: '60 Mins',
-    price: 2200
-  }
-];
+export const initialAppointments = [];
 
-export const initialClients = [
-  { id: 'C-01', name: 'Jane Doe', email: 'jane.doe@example.com', phone: '+1 555-0199', sessions: 8, status: 'Active' },
-  { id: 'C-02', name: 'Marcus Chen', email: 'marcus.chen@example.com', phone: '+1 555-0182', sessions: 12, status: 'Active' },
-  { id: 'C-03', name: 'Sarah Jenkins', email: 'sarah.jenkins@example.com', phone: '+1 555-0144', sessions: 5, status: 'Active' }
-];
+export const initialClients = [];
 
 export const reportsData = {
   summary: {
-    totalClients: 32,
-    totalSessions: 148,
-    revenue: 124000,
-    upcoming: 6
+    totalClients: 0,
+    totalSessions: 0,
+    revenue: 0,
+    upcoming: 0
   },
   revenueOverview: [
-    { month: 'Jan', amount: 35000 },
-    { month: 'Feb', amount: 42000 },
-    { month: 'Mar', amount: 48000 },
-    { month: 'Apr', amount: 55000 },
-    { month: 'May', amount: 68000 },
-    { month: 'Jun', amount: 124000 }
+    { month: 'Jan', amount: 0 },
+    { month: 'Feb', amount: 0 },
+    { month: 'Mar', amount: 0 },
+    { month: 'Apr', amount: 0 },
+    { month: 'May', amount: 0 },
+    { month: 'Jun', amount: 0 }
   ],
-  appointmentsOverview: [
-    { service: 'Anxiety', count: 45 },
-    { service: 'Depression', count: 32 },
-    { service: 'Relationship', count: 28 },
-    { service: 'Family', count: 18 },
-    { service: 'Career', count: 12 },
-    { service: 'Stress', count: 15 }
-  ],
-  clientGrowth: [
-    { month: 'Jan', count: 10 },
-    { month: 'Feb', count: 14 },
-    { month: 'Mar', count: 19 },
-    { month: 'Apr', count: 24 },
-    { month: 'May', count: 28 },
-    { month: 'Jun', count: 32 }
-  ]
+  appointmentsOverview: [],
+  clientGrowth: []
 };
 
-export const initialNotifications = [
-  { id: 1, type: 'Booking Updates', message: 'Your appointment request for Anxiety Counselling has been confirmed by Vanshika Singh.', date: '2026-06-11' },
-  { id: 2, type: 'Payment Updates', message: 'Invoice paid successfully: Order ID order_AC3948 settled via Razorpay sandbox.', date: '2026-06-11' },
-  { id: 3, type: 'Session Reminders', message: 'Friendly alert: Your secure video consultation starts in 1 hour.', date: '2026-06-11' },
-  { id: 4, type: 'Booking Updates', message: 'Vanshika Singh uploaded a session summary for your completed visit on June 8.', date: '2026-06-08' }
-];
+export const initialNotifications = [];
 
 export const counsellorProfile = {
   name: 'Vanshika Singh',

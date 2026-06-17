@@ -3,12 +3,12 @@ import { useApp } from '../../context/AppContext';
 import { RevenueChart, ServicesChart } from '../../components/admin/ChartContainer';
 
 export default function AdminHome() {
-  const { appointments, clients, approveAppointment, rejectAppointment, navigateTo } = useApp();
+  const { appointments, clients, approveAppointment, rejectAppointment, navigateTo, currentUser } = useApp();
 
   // Compute metrics dynamically from state
   const totalClients = clients.length;
   const todayApts = appointments.filter(a => a.status === 'Pending' || a.date === '2026-06-11');
-  const completedSessionsCount = appointments.filter(a => a.status === 'Completed').length + 80; // Scaled mock
+  const completedSessionsCount = appointments.filter(a => a.status === 'Completed').length;
   const activeApts = appointments.filter(a => a.status !== 'Cancelled');
   const revenueSum = activeApts.reduce((acc, a) => acc + (a.price || 1500), 0);
 
@@ -28,7 +28,7 @@ export default function AdminHome() {
           Clinical Overview
         </h1>
         <p className="text-sm text-slate-950 dark:text-beige-100 font-bold">
-          Welcome back, Vanshika Singh. Here is a summary of your clinical activities.
+          Welcome back, {currentUser?.name || 'Admin'}. Here is a summary of your clinical activities.
         </p>
       </div>
 

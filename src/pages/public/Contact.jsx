@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, Map } from 'lucide-react';
+import { Mail, Phone, Clock, Send } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function Contact() {
@@ -75,18 +75,6 @@ export default function Contact() {
 
               <div className="flex gap-4">
                 <div className="p-2.5 h-10 w-10 rounded-xl bg-primary-50 dark:bg-primary-950/20 text-primary flex items-center justify-center shrink-0">
-                  <MapPin className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 dark:text-slate-555 block font-bold uppercase tracking-wider">Clinic Address</span>
-                  <span className="text-sm font-semibold text-slate-800 dark:text-slate-205 leading-relaxed block">
-                    Vanshika Counselling Studio, Sector 62,<br />Noida, Uttar Pradesh, India
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="p-2.5 h-10 w-10 rounded-xl bg-primary-50 dark:bg-primary-950/20 text-primary flex items-center justify-center shrink-0">
                   <Clock className="h-5 w-5" />
                 </div>
                 <div>
@@ -98,31 +86,6 @@ export default function Contact() {
               </div>
             </div>
 
-          </div>
-
-          {/* Map Mock Up */}
-          <div className="premium-card overflow-hidden h-64 relative border border-slate-200/50 dark:border-slate-800/40">
-            <div className="absolute inset-0 bg-slate-100 dark:bg-slate-950 flex items-center justify-center opacity-85 select-none">
-              <svg className="w-full h-full stroke-slate-300 dark:stroke-slate-800" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="0" y1="50" x2="600" y2="50" strokeWidth="16" />
-                <line x1="0" y1="160" x2="600" y2="160" strokeWidth="24" />
-                <line x1="120" y1="0" x2="120" y2="300" strokeWidth="20" />
-                <line x1="340" y1="0" x2="340" y2="300" strokeWidth="32" />
-                <line x1="450" y1="0" x2="450" y2="300" strokeWidth="16" />
-              </svg>
-            </div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center space-y-1 z-10">
-              <div className="p-3 bg-primary text-white rounded-full shadow-lg border-2 border-white animate-bounce">
-                <MapPin className="h-5 w-5" />
-              </div>
-              <div className="bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow">
-                Vanshika Counselling Studio
-              </div>
-            </div>
-            <div className="absolute bottom-3 right-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-slate-800 text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-              <Map className="h-3.5 w-3.5" />
-              <span>Map View</span>
-            </div>
           </div>
         </div>
 

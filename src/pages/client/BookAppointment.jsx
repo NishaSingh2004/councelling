@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Calendar, Clock, CreditCard, ChevronRight, Check, X, ArrowLeft } from 'lucide-react';
+import { ShieldCheck, Clock, CreditCard, ChevronRight, Check, ArrowLeft, BadgeCheck, IndianRupee } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { services } from '../../data/mockData';
 
 export default function BookAppointment() {
-  const { timeSlots, addAppointment, navigateTo } = useApp();
+  const { timeSlots, addAppointment, navigateTo, currentUser, addNotification, services } = useApp();
   const [step, setStep] = useState(1);
-  
+
   // Selected values
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [isProcessingPay, setIsProcessingPay] = useState(false);
+  const [paymentId, setPaymentId] = useState('');
 
   // Derive unique dates that have available slots
   const availableDates = Array.from(new Set(
@@ -30,7 +30,7 @@ export default function BookAppointment() {
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
-    setSelectedTime(''); // Reset selected time
+    setSelectedTime('');
     setStep(3);
   };
 
@@ -43,20 +43,28 @@ export default function BookAppointment() {
     setStep(5);
   };
 
+  // Demo payment simulation — replaces Razorpay modal (no live key configured)
   const executePayment = () => {
     setIsProcessingPay(true);
-    setTimeout(() => {
-      // Add appointment to global state
-      addAppointment({
+
+    // Generate a realistic-looking Razorpay-style payment ID
+    const demoPayId = 'pay_DEMO' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+    // Simulate a 2.2s processing delay before confirming
+    setTimeout(async () => {
+      setPaymentId(demoPayId);
+
+      await addAppointment({
         service: selectedService.title,
         date: selectedDate,
         time: selectedTime,
-        price: selectedService.priceRaw
+        price: selectedService.priceRaw || selectedService.price,
+        paymentId: demoPayId
       });
+
       setIsProcessingPay(false);
-      // Navigate to My Appointments list
-      navigateTo('client-appointments');
-    }, 2000);
+      setStep(6); // Move to "Payment Confirmed" screen
+    }, 2200);
   };
 
   const stepsHeader = [
@@ -64,12 +72,13 @@ export default function BookAppointment() {
     { num: 2, label: 'Date' },
     { num: 3, label: 'Time' },
     { num: 4, label: 'Confirm' },
-    { num: 5, label: 'Pay' }
+    { num: 5, label: 'Pay' },
+    { num: 6, label: 'Done' }
   ];
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-fade-in pb-12">
-      
+
       {/* Page Title */}
       <div className="space-y-1">
         <h1 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-white">
@@ -120,7 +129,7 @@ export default function BookAppointment() {
 
       {/* WIZARD CONTAINER */}
       <div className="premium-card p-8 bg-white dark:bg-sage-900/60">
-        
+
         {/* STEP 1: SELECT SERVICE */}
         {step === 1 && (
           <div className="space-y-6">
@@ -156,7 +165,7 @@ export default function BookAppointment() {
             <h3 className="font-serif text-lg font-bold text-stone-900 dark:text-white">
               Step 2: Choose available date
             </h3>
-            
+
             {availableDates.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {availableDates.map((date) => {
@@ -220,7 +229,7 @@ export default function BookAppointment() {
             <h3 className="font-serif text-lg font-bold text-stone-900 dark:text-white">
               Step 4: Confirm Booking Summary
             </h3>
-            
+
             <div className="bg-beige-50 dark:bg-sage-900/60 border border-beige-100 dark:border-sage-850/40 p-6 rounded-2xl space-y-4">
               <div className="flex justify-between border-b border-beige-100 dark:border-sage-800/30 pb-3">
                 <span className="text-xs font-bold text-slate-950 dark:text-beige-300">Service Category</span>
@@ -254,10 +263,10 @@ export default function BookAppointment() {
           </div>
         )}
 
-        {/* STEP 5: PAY WITH RAZORPAY SIMULATOR */}
+        {/* STEP 5: PAY WITH RAZORPAY (DEMO) */}
         {step === 5 && (
           <div className="space-y-6 text-center">
-            
+
             {/* Razorpay Header Branding */}
             <div className="bg-[#0b1626] text-white p-5 rounded-2xl flex flex-col items-center space-y-2 relative overflow-hidden border border-white/5 shadow-md">
               <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-blue-500/10 blur-xl" />
@@ -280,9 +289,17 @@ export default function BookAppointment() {
 
             {isProcessingPay ? (
               <div className="py-8 space-y-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto" />
-                <span className="text-xs text-blue-500 dark:text-blue-400 font-semibold block uppercase tracking-wider animate-pulse">
-                  Verifying banking details with Razorpay API...
+                <div className="relative mx-auto h-14 w-14">
+                  <div className="animate-spin rounded-full h-14 w-14 border-4 border-blue-200 border-t-blue-600 absolute inset-0" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-[10px] font-black text-blue-600 italic">R</span>
+                  </div>
+                </div>
+                <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold block uppercase tracking-wider animate-pulse">
+                  Processing payment via Razorpay...
+                </span>
+                <span className="text-[10px] text-slate-500 dark:text-beige-400 font-bold block">
+                  Verifying with bank. Please do not close this page.
                 </span>
               </div>
             ) : (
@@ -292,28 +309,82 @@ export default function BookAppointment() {
                   className="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
                 >
                   <ShieldCheck className="h-4.5 w-4.5 text-blue-200" />
-                  <span>Pay with Razorpay (Demo)</span>
+                  <span>Pay {selectedService?.price} with Razorpay</span>
                 </button>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setStep(4)}
-                    className="py-2.5 px-4 bg-stone-150 dark:bg-sage-800 text-stone-600 dark:text-sage-300 rounded-lg text-xs font-semibold hover:bg-stone-200 transition-all"
-                  >
-                    Cancel Order
-                  </button>
-                  <button
-                    onClick={() => navigateTo('client-appointments')}
-                    className="py-2.5 px-4 border border-beige-200 dark:border-sage-800 text-stone-600 dark:text-sage-350 rounded-lg text-xs font-semibold hover:bg-stone-50 dark:hover:bg-sage-850 transition-all"
-                  >
-                    My Appointments
-                  </button>
-                </div>
+                <button
+                  onClick={() => setStep(4)}
+                  className="w-full py-2.5 px-4 bg-stone-100 dark:bg-sage-800 text-stone-600 dark:text-sage-300 rounded-lg text-xs font-semibold hover:bg-stone-200 transition-all"
+                >
+                  Go Back
+                </button>
               </div>
             )}
 
             <div className="text-[10px] text-slate-950 dark:text-beige-300 font-bold pt-3 flex items-center justify-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-emerald-500" />
               <span>SSL Secure 256-bit Connection. Powered by Razorpay.</span>
+            </div>
+
+          </div>
+        )}
+
+        {/* STEP 6: PAYMENT CONFIRMED ✅ */}
+        {step === 6 && (
+          <div className="space-y-6 text-center py-4 animate-fade-in">
+
+            {/* Big success icon */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-20 w-20 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border-4 border-emerald-400 flex items-center justify-center shadow-lg">
+                <BadgeCheck className="h-10 w-10 text-emerald-500" strokeWidth={1.8} />
+              </div>
+              <div>
+                <h3 className="font-serif text-xl font-bold text-stone-900 dark:text-white">Payment Successful!</h3>
+                <p className="text-sm text-stone-500 dark:text-beige-300 mt-1 font-bold">
+                  Your session has been confirmed and booked.
+                </p>
+              </div>
+            </div>
+
+            {/* Transaction summary card */}
+            <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 rounded-2xl p-6 max-w-sm mx-auto space-y-3 text-left">
+              <div className="flex justify-between text-xs">
+                <span className="font-bold text-stone-500 dark:text-beige-400">Transaction ID</span>
+                <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">{paymentId}</span>
+              </div>
+              <div className="flex justify-between text-xs border-t border-emerald-100 dark:border-emerald-900/40 pt-3">
+                <span className="font-bold text-stone-500 dark:text-beige-400">Service</span>
+                <span className="font-bold text-stone-900 dark:text-white">{selectedService?.title}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="font-bold text-stone-500 dark:text-beige-400">Date & Time</span>
+                <span className="font-bold text-stone-900 dark:text-white">{selectedDate} · {selectedTime}</span>
+              </div>
+              <div className="flex justify-between text-xs border-t border-emerald-100 dark:border-emerald-900/40 pt-3">
+                <span className="font-bold text-stone-500 dark:text-beige-400">Amount Paid</span>
+                <span className="font-bold text-emerald-700 dark:text-emerald-400">{selectedService?.price}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="font-bold text-stone-500 dark:text-beige-400">Payment Status</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] uppercase tracking-wide">
+                  PAID
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+              <button
+                onClick={() => navigateTo('client-appointments')}
+                className="btn-primary flex-1 flex items-center justify-center gap-2"
+              >
+                <Check className="h-4 w-4" />
+                View My Appointments
+              </button>
+              <button
+                onClick={() => navigateTo('client-payments')}
+                className="flex-1 py-2.5 px-4 border border-beige-200 dark:border-sage-800 text-stone-600 dark:text-sage-350 rounded-lg text-xs font-semibold hover:bg-stone-50 dark:hover:bg-sage-850 transition-all"
+              >
+                Download Receipt
+              </button>
             </div>
 
           </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Lock, LogIn, Shield, User, Heart } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-export default function Login() {
+export default function Login({ isAdminMode = false }) {
   const { login, navigateTo } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,7 +10,7 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(email, password, 'client');
+    login(email, password, isAdminMode ? 'admin' : 'client');
   };
 
   return (
@@ -58,18 +58,39 @@ export default function Login() {
         {/* Right Side: Login Form */}
         <div className="md:col-span-7 p-6 sm:p-12 flex flex-col justify-center space-y-8">
           
+          {/* Role Indicator Banner */}
+          {isAdminMode ? (
+            <div className="flex items-center gap-3 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40">
+              <Shield className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-amber-800 dark:text-amber-400">Admin Credentials Only</p>
+                <p className="text-[10px] text-amber-700 dark:text-amber-500 font-bold">This portal is exclusively for Clinical Administrators. Clients cannot access this area.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40">
+              <User className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-emerald-800 dark:text-emerald-400">Client Wellness Portal</p>
+                <p className="text-[10px] text-emerald-700 dark:text-emerald-500 font-bold">Login with your registered client account. Admin accounts are not allowed here.</p>
+              </div>
+            </div>
+          )}
+
           {/* Heading */}
           <div className="space-y-2">
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white leading-tight">
-              Welcome Back
+              {isAdminMode ? 'Clinical Control Access' : 'Welcome Back'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-light">
-              Sign in to access your secure wellness workspace.
+              {isAdminMode 
+                ? 'Sign in with clinical therapist credentials to enter control portal.' 
+                : 'Sign in to access your secure wellness workspace.'}
             </p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Form — autoComplete="off" prevents browser from cross-filling admin/client credentials */}
+          <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
             
             {/* Email Field */}
             <div className="space-y-1.5">
@@ -80,10 +101,12 @@ export default function Login() {
                 <Mail className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <input
                   type="email"
+                  name={isAdminMode ? 'admin-email' : 'client-email'}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                   required
+                  autoComplete="off"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-slate-850 dark:text-white transition-all font-light"
                 />
               </div>
@@ -98,10 +121,12 @@ export default function Login() {
                 <Lock className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <input
                   type="password"
+                  name={isAdminMode ? 'admin-password' : 'client-password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
+                  autoComplete="new-password"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-slate-850 dark:text-white transition-all font-light"
                 />
               </div>
@@ -138,64 +163,20 @@ export default function Login() {
 
           </form>
 
-          {/* Sandbox Demo Accounts Panel */}
-          <div className="space-y-3.5">
-            <div className="relative flex items-center justify-center">
-              <div className="border-t border-slate-200 dark:border-slate-850 w-full" />
-              <span className="absolute bg-white dark:bg-slate-900 px-3 text-[10px] text-slate-450 dark:text-slate-400 uppercase tracking-widest font-bold">
-                Sandbox Demo Portal
-              </span>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {/* Patient Demo */}
-              <button
-                onClick={() => login('jane.doe@example.com', 'clientpass', 'client')}
-                className="flex items-start text-left gap-3.5 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-850 hover:border-primary/50 hover:bg-primary-50/5 dark:hover:bg-primary-950/10 transition-all group hover:-translate-y-0.5 shadow-sm"
-              >
-                <div className="p-2.5 rounded-xl bg-primary-50 dark:bg-primary-950/40 text-primary mt-0.5 group-hover:scale-105 transition-transform">
-                  <User className="h-4.5 w-4.5" />
-                </div>
-                <div className="min-w-0">
-                  <span className="block text-xs font-bold text-slate-850 dark:text-slate-100 group-hover:text-primary transition-colors">
-                    Patient Workspace
-                  </span>
-                  <span className="block text-[10px] text-slate-400 dark:text-slate-500 font-light mt-0.5">
-                    Log in as patient (Jane Doe)
-                  </span>
-                </div>
-              </button>
-
-              {/* Admin Demo */}
-              <button
-                onClick={() => login('vanshika@vanshikacounselling.com', 'adminpass', 'admin')}
-                className="flex items-start text-left gap-3.5 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-850 hover:border-sage-500/50 hover:bg-sage-500/5 dark:hover:bg-sage-950/10 transition-all group hover:-translate-y-0.5 shadow-sm"
-              >
-                <div className="p-2.5 rounded-xl bg-sage-50 dark:bg-sage-950/40 text-sage-600 mt-0.5 group-hover:scale-105 transition-transform">
-                  <Shield className="h-4.5 w-4.5" />
-                </div>
-                <div className="min-w-0">
-                  <span className="block text-xs font-bold text-slate-850 dark:text-slate-100 group-hover:text-sage-600 transition-colors">
-                    Clinical Control
-                  </span>
-                  <span className="block text-[10px] text-slate-400 dark:text-slate-500 font-light mt-0.5">
-                    Log in as clinical therapist
-                  </span>
-                </div>
-              </button>
-            </div>
-          </div>
 
           {/* Footer Register Redirection */}
-          <div className="text-center text-xs text-slate-500 dark:text-slate-400 font-light pt-2">
-            New to Vanshika Counselling Studio?{' '}
-            <button
-              onClick={() => navigateTo('register')}
-              className="font-semibold text-primary hover:underline transition-colors"
-            >
-              Create confidential account
-            </button>
-          </div>
+          {!isAdminMode && (
+            <div className="text-center text-xs text-slate-500 dark:text-slate-400 font-light pt-2">
+              New to Vanshika Counselling Studio?{' '}
+              <button
+                onClick={() => navigateTo('register')}
+                className="font-semibold text-primary hover:underline transition-colors"
+              >
+                Create confidential account
+              </button>
+            </div>
+          )}
 
         </div>
 

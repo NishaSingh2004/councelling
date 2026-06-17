@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Filter } from 'lucide-react';
-import { services } from '../../data/mockData';
+import { useApp } from '../../context/AppContext';
 import ServiceCard from '../../components/public/ServiceCard';
 
 export default function Services() {
+  const { services } = useApp();
   const [filter, setFilter] = useState('all');
 
   const categories = [

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Mail, Phone, MapPin } from 'lucide-react';
+import { Heart, Mail, Phone } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function Footer() {
@@ -7,7 +7,7 @@ export default function Footer() {
 
   // If inside a dashboard workspace (client or admin), we don't display the full public footer
   // to maximize space and follow clean SaaS dashboard design principles.
-  const isDashboard = useApp().currentPage.startsWith('client-') || useApp().currentPage.startsWith('admin-');
+  const isDashboard = (useApp().currentPage.startsWith('client-') || useApp().currentPage.startsWith('admin-')) && useApp().currentPage !== 'admin-login';
 
   if (isDashboard) {
     return (
@@ -62,10 +62,6 @@ export default function Footer() {
           <div className="flex items-center gap-3 text-sm text-stone-400">
             <Phone className="h-4.5 w-4.5 text-sage-400" />
             <span>+91 98765 43210</span>
-          </div>
-          <div className="flex items-start gap-3 text-sm text-stone-400">
-            <MapPin className="h-4.5 w-4.5 text-sage-400 mt-0.5" />
-            <span>Vanshika Counselling Studio, Sector 62,<br />Noida, Uttar Pradesh, India</span>
           </div>
         </div>
 

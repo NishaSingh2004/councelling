@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 export default function SessionHistory() {
   const { appointments, currentUser } = useApp();
 
-  const clientEmail = currentUser?.email || 'jane.doe@example.com';
+  const clientEmail = currentUser?.email || '';
   const completedApts = appointments.filter(
     (apt) => apt.clientEmail === clientEmail && apt.status === 'Completed'
   );

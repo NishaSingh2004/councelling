@@ -12,13 +12,7 @@ import AdminSettings from './AdminSettings';
 export default function AdminDashboard() {
   const { currentPage, currentUser, login, userRole } = useApp();
 
-  // Safeguard: auto-login as Admin if accessed directly
-  useEffect(() => {
-    if (!currentUser || userRole !== 'admin') {
-      login('vanshika@vanshikacounselling.com', 'adminpass', 'admin');
-    }
-  }, [currentUser, userRole]);
-
+  // Safeguard: make sure admin is logged in
   if (!currentUser || userRole !== 'admin') {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">

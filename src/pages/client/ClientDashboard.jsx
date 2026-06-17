@@ -11,13 +11,7 @@ import ClientProfile from './ClientProfile';
 export default function ClientDashboard() {
   const { currentPage, currentUser, login } = useApp();
 
-  // Safeguard: auto-login demo client if accessed directly
-  useEffect(() => {
-    if (!currentUser) {
-      login('jane.doe@example.com', 'clientpass', 'client');
-    }
-  }, [currentUser]);
-
+  // Safeguard: make sure user is logged in
   if (!currentUser) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">

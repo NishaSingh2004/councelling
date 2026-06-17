@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { reportsData } from '../../data/mockData';
+import { useApp } from '../../context/AppContext';
 
 // 1. Revenue Area Chart (SVG based)
 export function RevenueChart() {
   const [hoveredPoint, setHoveredPoint] = useState(null);
-  const data = reportsData.revenueOverview;
+  const { reportsData } = useApp();
+  const data = reportsData?.revenueOverview || [];
   
   // Chart dimensions
   const width = 500;
@@ -127,7 +128,8 @@ export function RevenueChart() {
 // 2. Appointments per Service Bar Chart (SVG based)
 export function ServicesChart() {
   const [hoveredBar, setHoveredBar] = useState(null);
-  const data = reportsData.appointmentsOverview;
+  const { reportsData } = useApp();
+  const data = reportsData?.appointmentsOverview || [];
 
   // Chart dimensions
   const width = 500;

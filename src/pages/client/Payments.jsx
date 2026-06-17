@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 export default function Payments() {
   const { appointments, currentUser } = useApp();
 
-  const clientEmail = currentUser?.email || 'jane.doe@example.com';
+  const clientEmail = currentUser?.email || '';
   const clientApts = appointments.filter((apt) => apt.clientEmail === clientEmail);
   
   // Total Spent (non cancelled)
@@ -12,6 +12,55 @@ export default function Payments() {
     (acc, apt) => (apt.status !== 'Cancelled' ? acc + (apt.price || 1500) : acc),
     0
   );
+
+  const handleDownloadReceipt = (apt, txId) => {
+    const receiptText = `==================================================
+            VANSHIKA COUNSELLING STUDIO           
+==================================================
+           OFFICIAL PAYMENT RECEIPT & INVOICE     
+==================================================
+
+Receipt Number:   ` + txId + `
+Date Issued:      ` + new Date().toISOString().split('T')[0] + `
+Transaction ID:   ` + txId + `
+Status:           PAID (Razorpay Secure Checkout)
+
+--------------------------------------------------
+CLIENT DETAILS
+--------------------------------------------------
+Name:             ` + (currentUser?.name || 'Client User') + `
+Email:            ` + (currentUser?.email || 'client@example.com') + `
+
+--------------------------------------------------
+SESSION & BOOKING DETAILS
+--------------------------------------------------
+Service:          ` + apt.service + `
+Consultation Date: ` + apt.date + `
+Consultation Time: ` + apt.time + `
+Counsellor:       Vanshika Singh
+
+--------------------------------------------------
+BILLING & FINANCIALS
+--------------------------------------------------
+Amount:           INR ` + (apt.price || 1500) + `.00
+Tax / GST:        INR 0.00 (Included)
+--------------------------------------------------
+Total Paid:       INR ` + (apt.price || 1500) + `.00
+==================================================
+Thank you for prioritizing your mental wellness.
+For questions, contact: contact@vanshikastudio.com
+==================================================`;
+
+    const blob = new Blob([receiptText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'receipt_' + txId + '.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -68,7 +117,9 @@ export default function Payments() {
               </thead>
               <tbody className="divide-y divide-beige-100 dark:divide-sage-900/40 text-xs text-stone-700 dark:text-sage-350">
                 {clientApts.map((apt, i) => {
-                  const txId = `TXN-${apt.id.split('-')[1] || i}${Date.now().toString().slice(-4)}`;
+                  const txId = apt.notes && apt.notes.indexOf('Razorpay Payment ID: ') === 0
+                    ? apt.notes.replace('Razorpay Payment ID: ', '')
+                    : 'TXN-' + (apt.id.split('-')[1] || i) + '4823';
                   const isPaid = apt.status !== 'Cancelled';
                   return (
                     <tr key={apt.id} className="hover:bg-beige-50/20 dark:hover:bg-sage-900/10 transition-colors">
@@ -98,7 +149,7 @@ export default function Payments() {
                       <td className="py-4.5 px-6 text-right">
                         {isPaid ? (
                           <button
-                            onClick={() => alert(`Downloading payment receipt for transaction ${txId}...`)}
+                            onClick={() => handleDownloadReceipt(apt, txId)}
                             className="p-1.5 text-stone-400 hover:text-sage-600 hover:bg-beige-50 dark:hover:bg-sage-900 rounded-lg transition-colors inline-flex"
                             title="Download Receipt"
                           >

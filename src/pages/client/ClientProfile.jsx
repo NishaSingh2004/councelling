@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
-import { User, Lock, Mail, Phone, Bell, Save } from 'lucide-react';
+import { User, Lock, Mail, Phone, Bell, Save, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function ClientProfile() {
-  const { currentUser, updateProfile } = useApp();
+  const { currentUser, updateProfile, uploadAvatar, userRole } = useApp();
   
   // Profile form state
   const [profileData, setProfileData] = useState({
-    name: currentUser?.name || 'Jane Doe',
-    email: currentUser?.email || 'jane.doe@example.com',
-    phone: currentUser?.phone || '+1 555-0199',
+    name: currentUser?.name || '',
+    email: currentUser?.email || '',
+    phone: currentUser?.phone || '',
     communicationPreference: currentUser?.communicationPreference || 'Email & SMS',
-    bio: currentUser?.bio || 'Seeking mindfulness exercises to handle workplace stress.'
+    bio: currentUser?.bio || ''
   });
+
+  // ROLE GUARD — admin should never see client profile
+  if (userRole !== 'client') {
+    return (
+      <div className="max-w-xl mx-auto flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4 animate-fade-in">
+        <div className="p-5 rounded-full bg-rose-50 dark:bg-rose-950/20">
+          <AlertTriangle className="h-10 w-10 text-rose-500" />
+        </div>
+        <h2 className="font-serif text-xl font-bold text-stone-900 dark:text-white">Wrong Portal</h2>
+        <p className="text-sm text-stone-500 dark:text-beige-300 font-bold">
+          This page is for registered clients only.<br />Admins should use <span className="text-sage-600">Settings</span> to manage their profile.
+        </p>
+        <div className="px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 text-xs text-rose-700 dark:text-rose-400 font-bold flex items-center gap-2">
+          <ShieldAlert className="h-4 w-4" />
+          Client credentials required to access this profile.
+        </div>
+      </div>
+    );
+  }
 
   // Password state
   const [passwords, setPasswords] = useState({
@@ -139,6 +158,38 @@ export default function ClientProfile() {
         {/* Password & Alerts (Col-5) */}
         <div className="lg:col-span-5 space-y-8">
           
+          {/* Profile Picture Card */}
+          <div className="premium-card p-6 flex flex-col items-center text-center space-y-4">
+            <h3 className="font-serif text-base font-bold text-stone-900 dark:text-white border-b border-beige-100 dark:border-sage-800 pb-3 w-full text-left">
+              Profile Picture
+            </h3>
+            <div className="relative group">
+              <img
+                src={currentUser?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop'}
+                alt={currentUser?.name}
+                className="h-28 w-28 rounded-2xl object-cover border-2 border-sage-500 shadow-md transition-all group-hover:opacity-85"
+              />
+              <label className="absolute bottom-2 right-2 p-1.5 rounded-lg bg-sage-600 text-white shadow hover:bg-sage-700 transition-all cursor-pointer">
+                <User className="h-4 w-4" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      uploadAvatar(file);
+                    }
+                  }}
+                  className="hidden"
+                />
+              </label>
+            </div>
+            <div className="space-y-1">
+              <span className="block text-sm font-bold text-stone-850 dark:text-stone-100">{currentUser?.name}</span>
+              <span className="block text-xs text-stone-400 capitalize">{userRole} Account</span>
+            </div>
+          </div>
+
           {/* Change Password */}
           <form onSubmit={handlePasswordSubmit} className="premium-card p-6 space-y-5">
             <h3 className="font-serif text-base font-bold text-stone-900 dark:text-white border-b border-beige-100 dark:border-sage-800 pb-3">

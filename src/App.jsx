@@ -35,14 +35,40 @@ import AdminClients from './pages/admin/AdminClients';
 import AdminSessions from './pages/admin/AdminSessions';
 import AdminReports from './pages/admin/AdminReports';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminCategories from './pages/admin/AdminCategories';
 
 function AppContent() {
-  const { currentPage } = useApp();
+  const { currentPage, currentUser, userRole } = useApp();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const isDashboard = currentPage.startsWith('client-') || currentPage.startsWith('admin-');
+  const isDashboard = (currentPage.startsWith('client-') || currentPage.startsWith('admin-')) && currentPage !== 'admin-login';
 
   const renderContent = () => {
+    const isClientPage = currentPage.startsWith('client-');
+    const isAdminPage = currentPage.startsWith('admin-') && currentPage !== 'admin-login';
+
+    if (isClientPage && (!currentUser || userRole !== 'client')) {
+      return (
+        <div className="flex items-center justify-center min-h-[60vh] w-full">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+            <span className="text-sm text-stone-500 font-light">Verifying secure credentials...</span>
+          </div>
+        </div>
+      );
+    }
+
+    if (isAdminPage && (!currentUser || userRole !== 'admin')) {
+      return (
+        <div className="flex items-center justify-center min-h-[60vh] w-full">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+            <span className="text-sm text-stone-500 font-light">Verifying secure credentials...</span>
+          </div>
+        </div>
+      );
+    }
+
     switch (currentPage) {
       // Public Pages
       case 'about':
@@ -59,6 +85,8 @@ function AppContent() {
         return <ConsentNotice />;
       case 'login':
         return <Login />;
+      case 'admin-login':
+        return <Login isAdminMode={true} />;
       case 'register':
         return <Register />;
       case 'forgot-password':
@@ -93,6 +121,8 @@ function AppContent() {
         return <AdminReports />;
       case 'admin-settings':
         return <AdminSettings />;
+      case 'admin-categories':
+        return <AdminCategories />;
 
       case 'home':
       default:

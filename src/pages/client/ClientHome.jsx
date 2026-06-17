@@ -8,7 +8,7 @@ export default function ClientHome() {
   const [isBreathing, setIsBreathing] = useState(false);
   const [messageText, setMessageText] = useState('');
   
-  const clientEmail = currentUser?.email || 'jane.doe@example.com';
+  const clientEmail = currentUser?.email || '';
   const clientApts = appointments.filter((apt) => apt.clientEmail === clientEmail);
 
   // Compute stats

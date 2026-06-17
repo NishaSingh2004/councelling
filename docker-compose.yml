@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: counselling-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: counselling_password
+      POSTGRES_DB: counselling
+    ports:
+      - "5433:5432"
+    volumes:
+      - counselling_db_data:/var/lib/postgresql/data
+
+volumes:
+  counselling_db_data:

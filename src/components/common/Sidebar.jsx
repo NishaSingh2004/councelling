@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Heart, Home, Compass, User, Mail, 
   LayoutDashboard, Calendar, CalendarDays, History, CreditCard, 
-  Shield, CalendarCheck, Users, FileText, BarChart3, Settings, LogOut
+  Shield, CalendarCheck, Users, FileText, BarChart3, Settings, LogOut, Tag
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ThemeToggle from './ThemeToggle';
@@ -32,6 +32,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     { label: 'Calendar Slots', icon: CalendarDays, page: 'admin-slots' },
     { label: 'Patient Directory', icon: Users, page: 'admin-clients' },
     { label: 'Session Notes', icon: FileText, page: 'admin-sessions' },
+    { label: 'Counselling Categories', icon: Tag, page: 'admin-categories' },
     { label: 'Reports & Analytics', icon: BarChart3, page: 'admin-reports' },
     { label: 'System Settings', icon: Settings, page: 'admin-settings' },
   ];
@@ -75,7 +76,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             <div className="space-y-2">
               <div className="flex items-center gap-1.5 px-3">
                 <Shield className="h-3.5 w-3.5 text-primary" />
-                <span className="text-[10px] font-bold text-slate-950 dark:text-sage-500 uppercase tracking-widest block">
+                <span className="text-[10px] font-bold text-stone-400 dark:text-sage-500 uppercase tracking-widest block">
                   Clinical Control
                 </span>
               </div>
@@ -87,10 +88,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                     <button
                       key={link.page}
                       onClick={() => handleLinkClick(link.page)}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                         isActive
                           ? 'bg-sage-600 text-white shadow-sm font-bold'
-                          : 'text-slate-955 dark:text-sage-400 hover:bg-stone-50 dark:hover:bg-sage-955/20 hover:text-stone-900 dark:hover:text-white'
+                          : 'text-stone-500 dark:text-sage-400 hover:bg-stone-50 dark:hover:bg-sage-950/20 hover:text-stone-900 dark:hover:text-white'
                       }`}
                     >
                       <Icon className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-stone-400'}`} />
@@ -103,7 +104,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             <div className="pt-4 border-t border-stone-100 dark:border-sage-900/20">
               <button
                 onClick={() => handleLinkClick('home')}
-                className="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-955 dark:text-sage-400 hover:bg-stone-50 dark:hover:bg-sage-955/20"
+                className="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-semibold text-stone-500 dark:text-sage-400 hover:bg-stone-50 dark:hover:bg-sage-950/20"
               >
                 <Home className="h-4.5 w-4.5 text-stone-450" />
                 <span>Return to Website</span>
